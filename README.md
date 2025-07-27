@@ -1,0 +1,1 @@
+ogen --target gen --clean api.yaml
