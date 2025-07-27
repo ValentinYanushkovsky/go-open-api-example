@@ -237,7 +237,7 @@ func (s *Server) handleRegisterUserRequest(args [0]string, argsEscaped bool, w h
 		}
 	}()
 
-	var response *RegisterUserOK
+	var response RegisterUserRes
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -252,7 +252,7 @@ func (s *Server) handleRegisterUserRequest(args [0]string, argsEscaped bool, w h
 		type (
 			Request  = *RegisterUserReq
 			Params   = struct{}
-			Response = *RegisterUserOK
+			Response = RegisterUserRes
 		)
 		response, err = middleware.HookMiddleware[
 			Request,

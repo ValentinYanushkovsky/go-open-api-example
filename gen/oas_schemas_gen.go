@@ -2,6 +2,43 @@
 
 package api
 
+// Ref: #/components/schemas/ErrorResponse
+type ErrorResponse struct {
+	Message string    `json:"message"`
+	Code    int       `json:"code"`
+	Details OptString `json:"details"`
+}
+
+// GetMessage returns the value of Message.
+func (s *ErrorResponse) GetMessage() string {
+	return s.Message
+}
+
+// GetCode returns the value of Code.
+func (s *ErrorResponse) GetCode() int {
+	return s.Code
+}
+
+// GetDetails returns the value of Details.
+func (s *ErrorResponse) GetDetails() OptString {
+	return s.Details
+}
+
+// SetMessage sets the value of Message.
+func (s *ErrorResponse) SetMessage(val string) {
+	s.Message = val
+}
+
+// SetCode sets the value of Code.
+func (s *ErrorResponse) SetCode(val int) {
+	s.Code = val
+}
+
+// SetDetails sets the value of Details.
+func (s *ErrorResponse) SetDetails(val OptString) {
+	s.Details = val
+}
+
 type GetHelloOK struct {
 	Message string `json:"message"`
 }
@@ -16,6 +53,64 @@ func (s *GetHelloOK) SetMessage(val string) {
 	s.Message = val
 }
 
+// NewOptString returns new OptString with value set to v.
+func NewOptString(v string) OptString {
+	return OptString{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptString is optional string.
+type OptString struct {
+	Value string
+	Set   bool
+}
+
+// IsSet returns true if OptString was set.
+func (o OptString) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptString) Reset() {
+	var v string
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptString) SetTo(v string) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptString) Get() (v string, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptString) Or(d string) string {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+type RegisterUserBadRequest ErrorResponse
+
+func (*RegisterUserBadRequest) registerUserRes() {}
+
+type RegisterUserForbidden ErrorResponse
+
+func (*RegisterUserForbidden) registerUserRes() {}
+
+type RegisterUserInternalServerError ErrorResponse
+
+func (*RegisterUserInternalServerError) registerUserRes() {}
+
 type RegisterUserOK struct {
 	Message string `json:"message"`
 }
@@ -29,6 +124,8 @@ func (s *RegisterUserOK) GetMessage() string {
 func (s *RegisterUserOK) SetMessage(val string) {
 	s.Message = val
 }
+
+func (*RegisterUserOK) registerUserRes() {}
 
 type RegisterUserReq struct {
 	Email    string `json:"email"`
@@ -54,3 +151,7 @@ func (s *RegisterUserReq) SetEmail(val string) {
 func (s *RegisterUserReq) SetPassword(val string) {
 	s.Password = val
 }
+
+type RegisterUserUnauthorized ErrorResponse
+
+func (*RegisterUserUnauthorized) registerUserRes() {}

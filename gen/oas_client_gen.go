@@ -36,7 +36,7 @@ type Invoker interface {
 	// RegisterUser invokes registerUser operation.
 	//
 	// POST /register
-	RegisterUser(ctx context.Context, request *RegisterUserReq) (*RegisterUserOK, error)
+	RegisterUser(ctx context.Context, request *RegisterUserReq) (RegisterUserRes, error)
 }
 
 // Client implements OAS client.
@@ -157,12 +157,12 @@ func (c *Client) sendGetHello(ctx context.Context) (res *GetHelloOK, err error) 
 // RegisterUser invokes registerUser operation.
 //
 // POST /register
-func (c *Client) RegisterUser(ctx context.Context, request *RegisterUserReq) (*RegisterUserOK, error) {
+func (c *Client) RegisterUser(ctx context.Context, request *RegisterUserReq) (RegisterUserRes, error) {
 	res, err := c.sendRegisterUser(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendRegisterUser(ctx context.Context, request *RegisterUserReq) (res *RegisterUserOK, err error) {
+func (c *Client) sendRegisterUser(ctx context.Context, request *RegisterUserReq) (res RegisterUserRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("registerUser"),
 		semconv.HTTPRequestMethodKey.String("POST"),

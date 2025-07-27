@@ -25,6 +25,6 @@ func (UnimplementedHandler) GetHello(ctx context.Context) (r *GetHelloOK, _ erro
 // RegisterUser implements registerUser operation.
 //
 // POST /register
-func (UnimplementedHandler) RegisterUser(ctx context.Context, req *RegisterUserReq) (r *RegisterUserOK, _ error) {
+func (UnimplementedHandler) RegisterUser(ctx context.Context, req *RegisterUserReq) (r RegisterUserRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
